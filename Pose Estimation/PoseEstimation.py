@@ -10,7 +10,7 @@ mpDraw = mp.solutions.drawing_utils
 
 
 # Make entry as a img which could be a video, picture , real time webcame.
-cap = cv2.VideoCapture("PoseVideo/Vid1.mp4",)
+cap = cv2.VideoCapture("PoseVideo/Vid2.mp4",)
 
 # cap = cv2.VideoCapture(0) ==> realtime webcam 
 
