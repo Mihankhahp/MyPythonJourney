@@ -68,7 +68,7 @@ while True:
         volPerc = np.interp(length, [15, 114], [0, 100])
         volume.SetMasterVolumeLevel(vol, None)
 
-        if length < 25:
+        if length < 20:
             cv2.circle(img, (cx, cy), 7, (255, 0, 0), cv2.FILLED)
     cv2.rectangle(img, (50, 150), (85, 400), (0, 255, 0), 3)
     cv2.rectangle(img, (50, int(volBar)), (85, 400), (0, 255, 0), cv2.FILLED)
