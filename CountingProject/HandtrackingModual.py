@@ -39,8 +39,7 @@ class handDetector():
                     # print("it is cy :   ", cy)
                     # print("")
                     lmList.append([id, cx, cy])
-                    if id == 8:
-                        cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
+                    
         return lmList
 def main():
     pTime = 0  # past time
