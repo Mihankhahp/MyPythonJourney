@@ -64,8 +64,12 @@ class poseDetector():
         # Calculate the Angle:
         angle = math.degrees(math.atan2((drawList[-1][2])-(drawList[-2][2]), (drawList[-1][1])-(
             drawList[-2][1]))-math.atan2((drawList[0][2])-(drawList[-2][2]), (drawList[0][1])-(drawList[-2][1])))
+        if angle < 0:
+            angle += 360
         cv2.putText(img, str(int(angle)), ((
             drawList[1][1]-50), (drawList[1][2]+50)), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 2)
+
+        return angle
 
 
 def main():
