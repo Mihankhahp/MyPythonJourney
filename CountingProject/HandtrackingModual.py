@@ -34,10 +34,7 @@ class handDetector():
             for id, lm in enumerate(myHand.landmark):
                     h, w, c = img.shape
                     cx, cy = int(lm.x*w), int(lm.y * h)
-                    # print("it is id :   ", id)
-                    # print("it is cx :   ", cx)
-                    # print("it is cy :   ", cy)
-                    # print("")
+                 
                     lmList.append([id, cx, cy])
                     
         return lmList
