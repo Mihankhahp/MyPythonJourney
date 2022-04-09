@@ -30,7 +30,7 @@ while True:
 
     #  Find the hands
     img = detector.findHands(img)
-    lmList, handNo = detector.findPosition(img, draw=False)
+    lmList = detector.findPosition(img, draw=False)
 
     fingers = []
     if len(lmList) != 0:
