@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import time
+import math
 
 
 class handDetector():
@@ -29,16 +30,44 @@ class handDetector():
         return img
 
     def findPosition(self, img, handNo=0, draw=True):
-        lmList = []
+        self.lmList = []
         if self.results.multi_hand_landmarks:
             myHand = self.results.multi_hand_landmarks[handNo]
             for id, lm in enumerate(myHand.landmark):
                 h, w, c = img.shape
                 cx, cy = int(lm.x*w), int(lm.y * h)
-                lmList.append([id, cx, cy])
+                self.lmList.append([id, cx, cy])
                 # if id == 8:
                 #     cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
-        return lmList
+        return self.lmList
+
+    def findAngle(self, img, pointList, draw=True):
+        drawList = []
+
+        for point in pointList:
+            if len(self.lmList):
+                i, x, y = self.lmList[point][0:]
+                cv2.circle(img, (x, y), 10, (0, 255, 0), cv2.FILLED)
+                cv2.circle(img, (x, y), 15, (0, 255, 0), 2)
+                drawList.append([i, x, y])
+              
+                if draw:
+                    n = len(drawList)
+                    for i in range(n):
+                        if i+1 == n:
+                            break
+                        cv2.line(
+                            img, drawList[i][1:], drawList[i+1][1:], (0, 0, 255), 3)
+
+        # Calculate the Angle:
+        if len(drawList):
+            angle = math.degrees(math.atan2((drawList[-1][2])-(drawList[-2][2]), (drawList[-1][1])-(
+                drawList[-2][1]))-math.atan2((drawList[0][2])-(drawList[-2][2]), (drawList[0][1])-(drawList[-2][1])))
+            if angle < 0:
+                angle += 360
+            cv2.putText(img, str(int(angle)), ((
+                drawList[1][1]-50), (drawList[1][2]+50)), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 2)
+            return angle
 
 
 def main():
