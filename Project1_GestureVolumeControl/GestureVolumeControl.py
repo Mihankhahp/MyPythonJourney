@@ -39,43 +39,49 @@ pTime = 0
 
 while True:
     success, img = cap.read()
-    img = detector.findHands(img)
-    # Its already drawing in findHands
+    img = detector.findHands(img, draw=False)
     lmList = detector.findPosition(img, draw=False)
+    angle = detector.findAngle(img, pointList=[4, 5, 8])
     vol = 0
     volBar = 400
     volPerc = 0
 
     if len(lmList) != 0:
-        # print("ittttttttttttttttttttttttttttts", lmList)
+
+        # With Length( It had difficulty about how much is the hand's distance from the camera)
 
         # print(lmList[4], lmList[8])
         # The point of Tomb and Index finger
-        x4, y4 = lmList[4][1], lmList[4][2]
-        x8, y8 = lmList[8][1], lmList[8][2]
-        # find the center of line between this points
-        cx, cy = (x4+x8)//2, (y4+y8)//2
+        # x4, y4 = lmList[4][1], lmList[4][2]
+        # x8, y8 = lmList[8][1], lmList[8][2]
+        # # find the center of line between this points
+        # cx, cy = (x4+x8)//2, (y4+y8)//2
+        # cv2.circle(img, (x4, y4), 7, (255, 0, 255), cv2.FILLED)
+        # cv2.circle(img, (x8, y8), 7, (255, 0, 255), cv2.FILLED)
+        # cv2, line(img,  (x8, y8), (x4, y4), (0, 255, 0), 2)
+        # cv2.circle(img, (cx, cy), 7, (255, 0, 255), cv2.FILLED)
+        # length = math.hypot(x8-x4, y8-y4)
+        # if length < 20:
+        #     cv2.circle(img, (cx, cy), 7, (255, 0, 0), cv2.FILLED)
 
-        cv2.circle(img, (x4, y4), 7, (255, 0, 255), cv2.FILLED)
-        cv2.circle(img, (x8, y8), 7, (255, 0, 255), cv2.FILLED)
-        cv2, line(img,  (x8, y8), (x4, y4), (0, 255, 0), 2)
+        if angle > 180:
+            # Right Hand
+            vol = np.interp(angle, [245, 345], [maxVol, minVol])
+            volBar = np.interp(angle, [245, 345], [150, 400])
+            volPerc = np.interp(angle, [245, 345], [100, 0])
+            volume.SetMasterVolumeLevel(vol, None)
 
-        cv2.circle(img, (cx, cy), 7, (255, 0, 255), cv2.FILLED)
+        elif angle < 180:
+            # Left Hand
+            vol = np.interp(angle, [10, 120], [minVol, maxVol])
+            volBar = np.interp(angle, [10, 120], [400, 150])
+            volPerc = np.interp(angle, [10, 120], [0, 100])
+            volume.SetMasterVolumeLevel(vol, None)
 
-        length = math.hypot(x8-x4, y8-y4)
-        vol = np.interp(length, [15, 114], [minVol, maxVol])
-        volBar = np.interp(length, [15, 114], [400, 150])
-        volPerc = np.interp(length, [15, 114], [0, 100])
-        volume.SetMasterVolumeLevel(vol, None)
-
-        if length < 20:
-            cv2.circle(img, (cx, cy), 7, (255, 0, 0), cv2.FILLED)
     cv2.rectangle(img, (50, 150), (85, 400), (0, 255, 0), 3)
     cv2.rectangle(img, (50, int(volBar)), (85, 400), (0, 255, 0), cv2.FILLED)
     cv2.putText(img, f'{int(volPerc)}%', (40, 450),
                 cv2.FONT_HERSHEY_PLAIN, 3, (0, 255, 0), 3)
-    # print(length)
-    # print("fin")
 
     cTime = time.time()
     fps = 1/(cTime-pTime)
