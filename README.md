@@ -17,6 +17,11 @@ Pose Estimate Land Marks;
 <br/>
 ![pose_tracking_full_body_landmarks](https://user-images.githubusercontent.com/85022016/161560953-550125c1-a4f6-405b-b5b6-509f5a26fce3.png)
 <br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
 ---
 
@@ -31,6 +36,10 @@ Finally, the results appending to a list, and then other parts of the program us
 ---
 
 <br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
 Personal Trainer Project
 
@@ -41,3 +50,28 @@ In the next step as in past projects, we set some visualization and then use our
 ---
 
 <br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+AL VIRTUAL PAINTER
+
+In this program fingers' landmarks to define the exact coordinates of the fingers and then put if for Selecting or Drawing mode, followed by that we set some other if roots for each color and finally eraser.
+<bt/>  
+ultimately, we change the img type and show the changes on the final img .
+<bt/>  
+<bt/>  
+<bt/>
+
+    1.  Import img
+
+<bt/>  
+    2.Find Hands Landmarks
+<bt/>  
+    3.Check which fingers are up
+<bt/>  
+    4.If Selection Mode:==>
+<bt/>  
+    5.If Drawing Mode:==>
+<bt/>
