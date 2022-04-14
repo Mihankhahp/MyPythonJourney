@@ -8,21 +8,23 @@ import numpy as np
 import HandtrackingModual as htm
 
 
+# Initialization
+####################################################################################
+
 cap = cv2.VideoCapture(0)
 pTime = 0
 
-
+# Import pictures
 folderPath = "D:\MyPythonJourney\AL-VirtualPainter\VirtuallPaintingPictures"
 myList = os.listdir(folderPath)
-# print(myList)
 
-
+# Make each picture available and store it in list
 overLayList = []
 for imPath in myList:
     image = cv2.imread(f'{folderPath}/{imPath}')
     overLayList.append(image)
 
-# print(len(overLayList))
+# Default values
 header = overLayList[0]
 drawColor = (0, 255, 0)
 brushTickness = 15
@@ -30,16 +32,17 @@ eraserTickness = 150
 xp, yp = 0, 0
 imgCanvas = np.zeros((540, 960, 3), np.uint8)
 
+
 while True:
     success, img = cap.read()
     detector = htm.handDetector()
     img = cv2.resize(img, (960, 540))
-# Flip the image to synce with our hand direction
+    # Flip the image to synce with our hand direction
     img = cv2.flip(img, 1)
 
     img = detector.findHands(img)
     lmList = detector.findPosition(img, draw=False)
-    # angle= detector.findAngle()
+
     if len(lmList):
 
         # tip of index and middle fingers
@@ -48,54 +51,50 @@ while True:
 
         # Check which fingers are up
         fingers = detector.fingersUp()
-        # print(fingers)
+
+        # Selecting method
         if fingers[1] and fingers[2]:
+
+            # Refresh the coordinates when the mode had changed
             xp, yp = 0, 0
 
+            # When fingers go in header
             if y1 < 85:
+                # Green
                 if 320 < x1 < 389:
                     header = overLayList[0]
                     drawColor = (0, 255, 0)
-                    # print("overLayList[0]")
-
+                # Red
                 elif 434 < x1 < 494:
                     header = overLayList[1]
                     drawColor = (0, 0, 255)
-                    # print("overLayList[1]")
-
+                # Blue
                 elif 549 < x1 < 609:
                     header = overLayList[2]
                     drawColor = (255, 0, 0)
-                    # print("overLayList[2]")
-
-                elif 664 < x1 < 723:
+                # Eraser
+                elif 847 < x1 < 922:
                     header = overLayList[3]
                     drawColor = (0, 0, 0)
-                    # print("overLayList[3]")
-                elif 845 < x1 < 922:
-                    header = overLayList[4]
-                    drawColor = (255, 255, 255)
-                    # print("overLayList[4]")
-
             cv2.rectangle(img, (x1, y1-15), (x2, y2+15),
                           drawColor, cv2.FILLED)
 
-            # print("selection mode")
+        # Drawing method
         if fingers[1] and fingers[2] == False:
+
             cv2.circle(img, (x1, y1), 10, drawColor, cv2.FILLED)
-            print("Drawing mode")
+
             if xp == 0 and yp == 0:
                 xp, yp = x1, y1
 
-            elif drawColor == (0, 0, 0):
+            if drawColor == (0, 0, 0):
                 cv2.line(img, (xp, yp), (x1, y1), drawColor, eraserTickness)
-                cv2.line(imgCanvas, (xp, yp), (x1, y1),
-                         drawColor, eraserTickness)
+                cv2.line(imgCanvas, (xp, yp), (x1, y1), drawColor, eraserTickness)
+
             else:
                 cv2.line(img, (xp, yp), (x1, y1), drawColor, brushTickness)
-                cv2.line(imgCanvas, (xp, yp), (x1, y1),
-                         drawColor, brushTickness)
-                xp, yp = x1, y1
+                cv2.line(imgCanvas, (xp, yp), (x1, y1), drawColor, brushTickness)
+            xp, yp = x1, y1
 
     imageGray = cv2.cvtColor(imgCanvas, cv2.COLOR_BGR2GRAY)
     _, imgInv = cv2.threshold(imageGray, 50, 255, cv2.THRESH_BINARY_INV)
