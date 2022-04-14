@@ -85,21 +85,42 @@ while True:
             cv2.circle(img, (x1, y1), 10, drawColor, cv2.FILLED)
 
             if xp == 0 and yp == 0:
+
+                # Refreshing every time
                 xp, yp = x1, y1
 
+            # Eraser
             if drawColor == (0, 0, 0):
                 cv2.line(img, (xp, yp), (x1, y1), drawColor, eraserTickness)
-                cv2.line(imgCanvas, (xp, yp), (x1, y1), drawColor, eraserTickness)
+                cv2.line(imgCanvas, (xp, yp), (x1, y1),
+                         drawColor, eraserTickness)
 
+            # Other Color
             else:
                 cv2.line(img, (xp, yp), (x1, y1), drawColor, brushTickness)
-                cv2.line(imgCanvas, (xp, yp), (x1, y1), drawColor, brushTickness)
+                cv2.line(imgCanvas, (xp, yp), (x1, y1),
+                         drawColor, brushTickness)
+
             xp, yp = x1, y1
 
+
+# Combine img and imgCanvas
+
+    # Conver imgCanvas to gray image
     imageGray = cv2.cvtColor(imgCanvas, cv2.COLOR_BGR2GRAY)
+
+    # Conver imgGray to image invers
+    # in imgInv everythings are black and white ==> drawing will be black and background will be White IN CONTRAST the imgCanva which is background black and drwing colorful
     _, imgInv = cv2.threshold(imageGray, 50, 255, cv2.THRESH_BINARY_INV)
+
+    # Conver imgInv to BGR from Gray
     imgInv = cv2.cvtColor(imgInv, cv2.COLOR_GRAY2BGR)
+
+    # add imgInv and img
+    # Add drawing black on img
     img = cv2.bitwise_and(img, imgInv)
+
+    # Put the colorful drawing on the img which was combined with imgInv
     img = cv2.bitwise_or(img, imgCanvas)
 
 
